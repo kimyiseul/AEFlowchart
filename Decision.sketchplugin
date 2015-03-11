@@ -15,6 +15,9 @@ function decisionShape(label)
   var labelWidth = [labelFrame width];
   var labelHeight = [labelFrame height];
 
+  // set label style
+  label.textColor = MSColor.colorWithSVGString(labelFontColorBright);
+
   // set shape padding
   var minPadding = 32.0;
   var maxPadding = 64.0;
@@ -45,14 +48,60 @@ function decisionShape(label)
   var shapeFill = [shapeStyle fill];
 
   // add gradient fill
-  [shapeFill setFillType: 1];
-  var gradient = [shapeFill gradient];
-  [gradient setColor:[MSColor colorWithSVGString:"#C644FC"] atIndex:0];
-  [gradient setColor:[MSColor colorWithSVGString:"#5856D6"] atIndex:1];
+  shapeFill.fillType = 0;
+  shapeFill.color = MSColor.colorWithSVGString("#EC658D");
 
-  // add default inner shadow
-  var innerShadows = [shapeStyle innerShadows];
-  if([innerShadows count] <= 0) [innerShadows addNewStylePart];
+  // create Y & N
+  var parent = parent || doc.currentPage(),
+      textY = parent.addLayerOfType("text"),
+      textYFrame = [textY frame];
+
+  textY.setName("Y");
+  textY.setStringValue ("Y");
+  textY.textColor = MSColor.colorWithSVGString(labelFontColorBright);
+
+  var x = [labelFrame midX] - [textYFrame midX],
+      y = [labelFrame minY] - shapeVerticalPadding + 10;
+
+  [textYFrame setX: x];
+  [textYFrame setY: y];
 
   return shape;
 }
+
+
+        // this.debugLog("adding text layer")
+        // var parent = parent || doc.currentPage(),
+        //     name = name || "new text layer",
+        //     color = color || "#000000",
+        //     // color = [MSColor colorWithHex: color alpha: 1],
+        //     color = MSColor.colorWithSVGString(color),
+        //     fontSize = fontSize || 14,
+        //     string = string || "Type something",
+        //     w = w || 400,
+        //     h = h || 24,
+        //     x = x || 0,
+        //     y = y || 0,
+        //     fixed = fixed || false; //fixed width
+
+        // var textLayer = parent.addLayerOfType("text");
+
+        //     textLayer.textColor = color;
+        //     textLayer.fontSize = fontSize;
+
+        //     textLayer.setName(name);
+        //     textLayer.setNameIsFixed(true);
+        //     this.setStringValue(textLayer, string);
+            
+        //     var textLayerFrame = [textLayer frame];
+        //     [textLayerFrame setWidth: w];
+        //     //[textLayerFrame setHeight: h];
+            
+        //     [textLayerFrame setX: x];
+        //     [textLayerFrame setY: y];
+
+        //     if(fixed){
+        //         textLayer.setTextBehaviour(1) // BCTextBehaviourFixedWidth
+        //     }
+
+        //     textLayer.setFontPostscriptName('Optima')

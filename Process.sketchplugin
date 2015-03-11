@@ -19,10 +19,17 @@ function processShape(label)
   // set frame
   var labelFrame = [label frame];
   var shapeFrame = [shape frame];
-  [shapeFrame setWidth:[labelFrame width] + 40];
-  [shapeFrame setHeight:[labelFrame height] + 30];
+  // [shapeFrame setWidth:[labelFrame width] + 40];
+  // [shapeFrame setHeight:[labelFrame height] + 30];
+  // [shapeFrame setMidX:[labelFrame midX]];
+  // [shapeFrame setMidY:[labelFrame midY]];
+  // 
+  
+  shapeFrame.setWidth(150);
+  shapeFrame.setHeight(60);
   [shapeFrame setMidX:[labelFrame midX]];
   [shapeFrame setMidY:[labelFrame midY]];
+
   [shapeGroup setFrame: shapeFrame];
 
   // set style
