@@ -2,7 +2,7 @@
 // Source: github.com/tadija/AEFlowchart
 // Version: 1.0
 
-var labelFontName = "Andale Mono";
-var labelFontSize = 14;
-var labelFontColor = "#FFFFFF";
-var labelDropShadow = true;
+var labelFontName = "Helvatica";
+var labelFontSize = 12;
+var labelFontColor = "#454545";
+var labelDropShadow = false;
