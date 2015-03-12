@@ -21,7 +21,7 @@ function createStep(stepName, drawShape)
 			if ([label class] === MSTextLayer) {
 				styleStepTitle(label);
 
-				var shape = drawShape(stepName, label);
+				var shape = drawShape(label);
 				var newGroup = groupStepLayers(stepName, label, shape);
 
 				if (stepName == "Decision") {

@@ -45,7 +45,7 @@ function addXYText(newGroup, label, shape) {
 }
 
 /*  draw decision diamond shape for given label  */
-function decisionShape(stepName, label, newGroup, parentGroup)
+function decisionShape(label)
 {
   // get label size
   var labelFrame = [label frame];
