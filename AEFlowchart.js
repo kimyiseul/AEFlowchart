@@ -19,10 +19,14 @@ function createStep(stepName, drawShape)
 
 			// create flowchart shapes from text
 			if ([label class] === MSTextLayer) {
-
 				styleStepTitle(label);
-				var shape = drawShape(label);
-				groupStepLayers(stepName, label, shape);
+
+				var shape = drawShape(stepName, label);
+				var newGroup = groupStepLayers(stepName, label, shape);
+
+				if (stepName == "Decision") {
+					addXYText(newGroup, label, shape);
+				}
 
 			}
 			else {
@@ -75,6 +79,7 @@ function groupStepLayers(stepName, label, shape)
 
 	// create new group
 	var newGroup = [parentGroup addLayerOfType:"group"];
+	
 	[newGroup setName:stepName + " - " + [label stringValue]];
 
 	// add shape to new group
@@ -92,4 +97,6 @@ function groupStepLayers(stepName, label, shape)
 
 	// refresh group size
 	[newGroup resizeRoot:0];
+
+	return newGroup;
 }

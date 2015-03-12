@@ -7,8 +7,45 @@
 /*  call AEFlowchart main function with custom name and shape function  */
 createStep("Decision", decisionShape);
 
+function addXYText(newGroup, label, shape) {
+  var labelFrame = [label frame],
+      shapeFrame = shape.frame();
+
+  // create Y & N
+  var textYes = newGroup.addLayerOfType("text"),
+      textNo = newGroup.addLayerOfType("text"),
+      textYesFrame = [textYes frame];
+      textNoFrame = [textNo frame];
+
+  textYes.setName("Y");
+  textYes.setStringValue ("Y");
+  textYes.textColor = MSColor.colorWithSVGString(labelFontColorBright);
+
+  textNo.setName("N");
+  textNo.setStringValue ("N");
+  textNo.textColor = MSColor.colorWithSVGString(labelFontColorBright);
+
+
+  var xYes = [labelFrame midX] + 20,
+      yYes = [labelFrame minY] ;
+
+  [textYesFrame setX: xYes];
+  [textYesFrame setY: yYes];
+
+  var xNo = [labelFrame midX],
+      yNo = [labelFrame minY] + 20;
+
+  [textNoFrame setX: xNo];
+  [textNoFrame setY: yNo];
+
+  // Relocate the label
+  labelFrame.setY(shapeFrame.minY());
+  labelFrame.setX(shapeFrame.midX() - labelFrame.width() - 20);
+
+}
+
 /*  draw decision diamond shape for given label  */
-function decisionShape(label)
+function decisionShape(stepName, label, newGroup, parentGroup)
 {
   // get label size
   var labelFrame = [label frame];
@@ -16,26 +53,28 @@ function decisionShape(label)
   var labelHeight = [labelFrame height];
 
   // set label style
-  label.textColor = MSColor.colorWithSVGString(labelFontColorBright);
+  label.textColor = MSColor.colorWithSVGString(labelFontColor);
 
   // set shape padding
-  var minPadding = 32.0;
-  var maxPadding = 64.0;
+  var minPadding = 40,
+      maxPadding = 40,
+      shapeHorizontalPadding = 40,
+      shapeVerticalPadding = 40;
   // horizontal
-  var shapeHorizontalPadding = labelWidth * 0.3;
-  if(shapeHorizontalPadding < minPadding) shapeHorizontalPadding = minPadding;
-  if(shapeHorizontalPadding > maxPadding) shapeHorizontalPadding = maxPadding;
-  // vertical
-  var shapeVerticalPadding = labelHeight * 1.3;
-  if(shapeVerticalPadding < minPadding) shapeVerticalPadding = minPadding;
-  if(shapeVerticalPadding > maxPadding) shapeVerticalPadding = maxPadding;
+  // var shapeHorizontalPadding = labelWidth * 0.3;
+  // if(shapeHorizontalPadding < minPadding) shapeHorizontalPadding = minPadding;
+  // if(shapeHorizontalPadding > maxPadding) shapeHorizontalPadding = maxPadding;
+  // // vertical
+  // var shapeVerticalPadding = labelHeight * 1.3;
+  // if(shapeVerticalPadding < minPadding) shapeVerticalPadding = minPadding;
+  // if(shapeVerticalPadding > maxPadding) shapeVerticalPadding = maxPadding;
 
   // create shape path
   var shapePath = [NSBezierPath bezierPath];
-  [shapePath moveToPoint:CGPointMake([labelFrame midX], [labelFrame minY] - shapeVerticalPadding)];
-  [shapePath lineToPoint:CGPointMake([labelFrame maxX] + shapeHorizontalPadding, [labelFrame midY])];
-  [shapePath lineToPoint:CGPointMake([labelFrame midX], [labelFrame maxY] + shapeVerticalPadding)];
-  [shapePath lineToPoint:CGPointMake([labelFrame minX] - shapeHorizontalPadding, [labelFrame midY])];
+  [shapePath moveToPoint:CGPointMake([labelFrame midX], [labelFrame midY] - 40)];
+  [shapePath lineToPoint:CGPointMake([labelFrame midX] + 40, [labelFrame midY])];
+  [shapePath lineToPoint:CGPointMake([labelFrame midX], [labelFrame midY] + 40)];
+  [shapePath lineToPoint:CGPointMake([labelFrame midX] - 40, [labelFrame midY])];
   [shapePath closePath];
 
   // create shape
@@ -50,21 +89,6 @@ function decisionShape(label)
   // add gradient fill
   shapeFill.fillType = 0;
   shapeFill.color = MSColor.colorWithSVGString("#EC658D");
-
-  // create Y & N
-  var parent = parent || doc.currentPage(),
-      textY = parent.addLayerOfType("text"),
-      textYFrame = [textY frame];
-
-  textY.setName("Y");
-  textY.setStringValue ("Y");
-  textY.textColor = MSColor.colorWithSVGString(labelFontColorBright);
-
-  var x = [labelFrame midX] - [textYFrame midX],
-      y = [labelFrame minY] - shapeVerticalPadding + 10;
-
-  [textYFrame setX: x];
-  [textYFrame setY: y];
 
   return shape;
 }
