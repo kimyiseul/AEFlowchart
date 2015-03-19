@@ -47,13 +47,21 @@ function drawOneConnection(firstStep, secondStep)
       firstStepVerticalMiddle;
 
   if (firstStep.name().indexOf("Decision -") > -1) {
+
     var decisionShape = firstStep.layers().array()[0];
     var decisionShapeFrame = decisionShape.frame();
 
+    log ("First " + decisionShape.name())
+
     firstStepBottom = firstStepFrame.minY() + decisionShapeFrame.maxY() - connectionsGroupY;
-    firstStepRight = firstStepFrame. maxX() + decisionShapeFrame.minX() - connectionsGroupX;
+    firstStepRight = firstStepFrame.minX() + decisionShapeFrame.maxX() - connectionsGroupX;
     firstStepHorizontalMiddle = firstStepFrame.minX() + decisionShapeFrame.midX() - connectionsGroupX;
     firstStepVerticalMiddle = firstStepFrame.minY() + decisionShapeFrame.midY() - connectionsGroupY;
+
+    log (firstStepBottom);
+    log (firstStepRight);
+    log (firstStepHorizontalMiddle);
+    log (firstStepVerticalMiddle);
 
   } else {
     firstStepBottom = firstStepFrame.maxY() - connectionsGroupY;
@@ -74,8 +82,8 @@ function drawOneConnection(firstStep, secondStep)
 
     log ("Second " + decisionShape.name())
 
-    secondStepTop = secondStepFrame.minY() +  decisionShapeFrame.maxY() - connectionsGroupY;
-    secondStepLeft = secondStepFrame.minX() +  decisionShapeFrame.minX() - connectionsGroupX;
+    secondStepTop = secondStepFrame.minY() + decisionShapeFrame.minY() - connectionsGroupY;
+    secondStepLeft = secondStepFrame.minX() + decisionShapeFrame.minX() - connectionsGroupX;
     secondStepHorizontalMiddle = secondStepFrame.minX() + decisionShapeFrame.midX() - connectionsGroupX;
     secondStepVerticalMiddle = secondStepFrame.minY() + decisionShapeFrame.midY() - connectionsGroupY;
   } else {
@@ -90,6 +98,9 @@ function drawOneConnection(firstStep, secondStep)
   var verticalSpacingHalf = (secondStepTop - firstStepBottom) / 2;
   var horizontalMiddleDifference = firstStepHorizontalMiddle - secondStepHorizontalMiddle;
   var verticalMiddleDifference = firstStepVerticalMiddle - secondStepVerticalMiddle;
+
+  log ("horizontalMiddleDifference " + horizontalMiddleDifference);
+  log ("verticalMiddleDifference " + verticalMiddleDifference);  
 
   // create NSBezierPath
   var lineBezierPath = [NSBezierPath bezierPath];
