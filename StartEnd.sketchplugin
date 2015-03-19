@@ -1,4 +1,4 @@
-// Sketch Plugin: AEFlowchart - StartEnd (ctrl shift s)
+// Sketch Plugin: AEFlowchart - StartEnd (ctrl shift e)
 // Source: github.com/tadija/AEFlowchart
 // Version: 1.0
 
@@ -7,49 +7,70 @@
 /*  call AEFlowchart main function with custom name and shape function  */
 createStep("StartEnd", startEndShape);
 
+function addStartEndSymbol (newGroup, label, shape) {
+  log ("add");
+
+  var labelFrame = [label frame],
+      shapeFrame = shape.frame();
+
+  var ovalShape = MSOvalShape.alloc().init();
+  ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,30,30));
+
+  var shapeGroup=ovalShape.embedInShapeGroup();
+  var fill = shapeGroup.style().fills().addNewStylePart();
+  fill.color = MSColor.colorWithSVGString("#dd2020");
+
+  label.fontSize = 5;
+  labelFrame.setMidX(10);
+  labelFrame.setMidY(0);
+
+  shapeGroup.frame().setMidX(10);
+  shapeGroup.frame().setMidY(0);
+
+  newGroup.addLayers([shapeGroup]);
+}
+
 /*  draw start-end rounded rectangle shape for given label  */
 function startEndShape(label)
 {
   // create shape
   var parentGroup = [label parentGroup];
-  var shape = [[MSRectangleShape alloc] init];
-  var shapeGroup = shape.embedInShapeGroup();
-  [parentGroup addLayers:[shapeGroup]];
+  var ovalShape = MSOvalShape.alloc().init();
+  ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,30,30));
+
+  var shapeGroup = ovalShape.embedInShapeGroup();
+  var fill = shapeGroup.style().fills().addNewStylePart();
+  fill.color = MSColor.colorWithSVGString("#dd2020");
+  
+  parentGroup.addLayers([shapeGroup]);
+
+  // set font
+  label.fontSize = 11;
+  label.textColor = MSColor.colorWithSVGString("#FFFFFF");
+  label.setFontPostscriptName(labelFontNameForDecision);
 
   // set frame
   var labelFrame = [label frame];
-  var shapeFrame = [shape frame];
-  [shapeFrame setWidth:[labelFrame width] + 40];
-  [shapeFrame setHeight:[labelFrame height] + 20];
-  [shapeFrame setMidX:[labelFrame midX]];
-  [shapeFrame setMidY:[labelFrame midY]];
+  var shapeFrame = [ovalShape frame];
+
+  shapeFrame.setMidX(labelFrame.midX());
+  shapeFrame.setMidY(labelFrame.midY());
+
   [shapeGroup setFrame: shapeFrame];
+
+  // set border
+  var border = shapeGroup.style().borders().addNewStylePart();
+  border.color = MSColor.colorWithSVGString(processBorderColor);
+  border.thickness = 0;
 
   // set style
   var shapeStyle = [shapeGroup style];
   var fills = [shapeStyle fills];
   if([fills count] <= 0) [fills addNewStylePart];
-  var shapeFill = [shapeStyle fill];
-
-  // add gradient fill
-  [shapeFill setFillType: 1];
-  var gradient = [shapeFill gradient];
-  [gradient setColor:[MSColor colorWithSVGString:"#FF5B37"] atIndex:0];
-  [gradient setColor:[MSColor colorWithSVGString:"#FB2B69"] atIndex:1];
-
-  // add default inner shadow
-  var innerShadows = [shapeStyle innerShadows];
-  if([innerShadows count] <= 0) [innerShadows addNewStylePart];
-
-  // round corners (calculate pill radius)
-  var radius;
-  if ([shapeFrame width] >= [shapeFrame height]) {
-    radius = [shapeFrame height] / 2;
-  } else {
-    radius = [shapeFrame width] / 2;
-  }
-  var firstObject = [[shapeGroup layers] firstObject];
-  [firstObject setCornerRadiusFloat:Math.round(radius)];
+  
+  var shapeFill = shapeStyle.fill();
+  shapeFill.setFillType(0);
+  shapeFill.color = MSColor.colorWithSVGString(startEndFillColor);
 
   return shapeGroup;
 }

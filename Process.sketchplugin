@@ -19,31 +19,53 @@ function processShape(label)
   // set frame
   var labelFrame = [label frame];
   var shapeFrame = [shape frame];
-  // [shapeFrame setWidth:[labelFrame width] + 40];
-  // [shapeFrame setHeight:[labelFrame height] + 30];
-  // [shapeFrame setMidX:[labelFrame midX]];
-  // [shapeFrame setMidY:[labelFrame midY]];
-  // 
   
-  shapeFrame.setWidth(150);
-  shapeFrame.setHeight(60);
-  [shapeFrame setMidX:[labelFrame midX]];
-  [shapeFrame setMidY:[labelFrame midY]];
+  // resize label size if label is too long
+  if (labelFrame.width() > 100) {
+      var oldWidth = labelFrame.width();
+      labelFrame.setWidth(100);
+      labelFrame.setHeight(16 * Math.ceil((oldWidth/100)));
+  }
+
+
+  shapeFrame.setWidth(120);
+  shapeFrame.setHeight(55);
+  shapeFrame.setMidX(labelFrame.midX());
+  shapeFrame.setMidY(labelFrame.midY());
 
   [shapeGroup setFrame: shapeFrame];
+
+  // set border
+  var border = shapeGroup.style().borders().addNewStylePart();
+  
+  border.color = MSColor.colorWithSVGString(processBorderColor);
+  border.thickness = 2;
 
   // set style
   var shapeStyle = [shapeGroup style];
   var fills = [shapeStyle fills];
   if([fills count] <= 0) [fills addNewStylePart];
-  var fill = [shapeStyle fill];
+  
+  // var shapeFill = [shapeStyle fill];
 
-  // add gradient fill
-  [fill setFillType: 0];
-  fill.color = MSColor.colorWithSVGString("#F1F1EF");
+  // // add gradient fill
+  // [shapeFill setFillType: 1];
   // var gradient = [shapeFill gradient];
   // [gradient setColor:[MSColor colorWithSVGString:"#1AD6FD"] atIndex:0];
   // [gradient setColor:[MSColor colorWithSVGString:"#1D62F0"] atIndex:1];
+
+  // add solid fill
+  //var fill = [shapeStyle fill];
+  // [fill setFillType: 0];
+  // fill.color = MSColor.colorWithSVGString(processFillColor);
+  
+  // add gradient fill  
+  var shapeFill = shapeStyle.fill();
+  shapeFill.setFillType(1);
+  
+  var gradient = shapeFill.gradient();
+  [gradient setColor:[MSColor colorWithSVGString:processFillGradientFrom] atIndex:0];
+  [gradient setColor:[MSColor colorWithSVGString:processFillGradientTo] atIndex:1];
 
   // add default inner shadow
   // var innerShadows = [shapeStyle innerShadows];

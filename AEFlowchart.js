@@ -26,8 +26,7 @@ function createStep(stepName, drawShape)
 
 				if (stepName == "Decision") {
 					addXYText(newGroup, label, shape);
-				}
-
+				} 
 			}
 			else {
 				[doc showMessage:"Sorry, you have to select text layer"];

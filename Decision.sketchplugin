@@ -19,24 +19,28 @@ function addXYText(newGroup, label, shape) {
 
   textYes.setName("Y");
   textYes.setStringValue ("Y");
+  textYes.fontSize = labelFontSizeForDecision;
+  textYes.setFontPostscriptName(labelFontNameForDecision);
   textYes.textColor = MSColor.colorWithSVGString(labelFontColorBright);
 
   textNo.setName("N");
   textNo.setStringValue ("N");
+  textNo.fontSize = labelFontSizeForDecision;
+  textNo.setFontPostscriptName(labelFontNameForDecision);
   textNo.textColor = MSColor.colorWithSVGString(labelFontColorBright);
 
 
-  var xYes = [labelFrame midX] + 20,
-      yYes = [labelFrame minY] ;
+  var xYes = shapeFrame.midX() + 11,
+      yYes = shapeFrame.midY();
 
-  [textYesFrame setX: xYes];
-  [textYesFrame setY: yYes];
+  textYesFrame.setX(shapeFrame.midX() + 11);
+  textYesFrame.setMidY(shapeFrame.midY());
 
-  var xNo = [labelFrame midX],
-      yNo = [labelFrame minY] + 20;
+  var xNo = shapeFrame.midX(),
+      yNo = shapeFrame.maxY() - 16;
 
-  [textNoFrame setX: xNo];
-  [textNoFrame setY: yNo];
+  textNoFrame.setMidX(shapeFrame.midX());
+  textNoFrame.setY(shapeFrame.maxY() - 16);
 
   // Relocate the label
   labelFrame.setY(shapeFrame.minY());
@@ -53,28 +57,23 @@ function decisionShape(label)
   var labelHeight = [labelFrame height];
 
   // set label style
-  label.textColor = MSColor.colorWithSVGString(labelFontColor);
+  label.setFontPostscriptName(labelFontName);
+  label.textColor = MSColor.colorWithSVGString(labelFontColor);  
+  label.setFontSize (decisionLabelFontSize);
 
   // set shape padding
-  var minPadding = 40,
+  var nSize = 25,
+      minPadding = 40,
       maxPadding = 40,
       shapeHorizontalPadding = 40,
       shapeVerticalPadding = 40;
-  // horizontal
-  // var shapeHorizontalPadding = labelWidth * 0.3;
-  // if(shapeHorizontalPadding < minPadding) shapeHorizontalPadding = minPadding;
-  // if(shapeHorizontalPadding > maxPadding) shapeHorizontalPadding = maxPadding;
-  // // vertical
-  // var shapeVerticalPadding = labelHeight * 1.3;
-  // if(shapeVerticalPadding < minPadding) shapeVerticalPadding = minPadding;
-  // if(shapeVerticalPadding > maxPadding) shapeVerticalPadding = maxPadding;
 
   // create shape path
   var shapePath = [NSBezierPath bezierPath];
-  [shapePath moveToPoint:CGPointMake([labelFrame midX], [labelFrame midY] - 40)];
-  [shapePath lineToPoint:CGPointMake([labelFrame midX] + 40, [labelFrame midY])];
-  [shapePath lineToPoint:CGPointMake([labelFrame midX], [labelFrame midY] + 40)];
-  [shapePath lineToPoint:CGPointMake([labelFrame midX] - 40, [labelFrame midY])];
+  [shapePath moveToPoint:CGPointMake([labelFrame midX], [labelFrame midY] - nSize)];
+  [shapePath lineToPoint:CGPointMake([labelFrame midX] + nSize, [labelFrame midY])];
+  [shapePath lineToPoint:CGPointMake([labelFrame midX], [labelFrame midY] + nSize)];
+  [shapePath lineToPoint:CGPointMake([labelFrame midX] - nSize, [labelFrame midY])];
   [shapePath closePath];
 
   // create shape
@@ -92,40 +91,3 @@ function decisionShape(label)
 
   return shape;
 }
-
-
-        // this.debugLog("adding text layer")
-        // var parent = parent || doc.currentPage(),
-        //     name = name || "new text layer",
-        //     color = color || "#000000",
-        //     // color = [MSColor colorWithHex: color alpha: 1],
-        //     color = MSColor.colorWithSVGString(color),
-        //     fontSize = fontSize || 14,
-        //     string = string || "Type something",
-        //     w = w || 400,
-        //     h = h || 24,
-        //     x = x || 0,
-        //     y = y || 0,
-        //     fixed = fixed || false; //fixed width
-
-        // var textLayer = parent.addLayerOfType("text");
-
-        //     textLayer.textColor = color;
-        //     textLayer.fontSize = fontSize;
-
-        //     textLayer.setName(name);
-        //     textLayer.setNameIsFixed(true);
-        //     this.setStringValue(textLayer, string);
-            
-        //     var textLayerFrame = [textLayer frame];
-        //     [textLayerFrame setWidth: w];
-        //     //[textLayerFrame setHeight: h];
-            
-        //     [textLayerFrame setX: x];
-        //     [textLayerFrame setY: y];
-
-        //     if(fixed){
-        //         textLayer.setTextBehaviour(1) // BCTextBehaviourFixedWidth
-        //     }
-
-        //     textLayer.setFontPostscriptName('Optima')
