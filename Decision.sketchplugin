@@ -1,6 +1,4 @@
-// Sketch Plugin: AEFlowchart - Decision (ctrl shift d)
-// Source: github.com/tadija/AEFlowchart
-// Version: 1.0
+// Decision (ctrl shift d)
 
 #import 'AEFlowchart.js'
 
@@ -45,6 +43,8 @@ function addXYText(newGroup, label, shape) {
   // Relocate the label
   labelFrame.setY(shapeFrame.minY());
   labelFrame.setX(shapeFrame.midX() - labelFrame.width() - 20);
+
+  newGroup.resizeRoot(0);
 
 }
 

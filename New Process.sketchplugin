@@ -1,0 +1,5 @@
+// Process (ctrl shift p)
+
+#import 'flowmate.js'
+
+com.flowmate.createShapeByType("process");

@@ -1,6 +1,4 @@
-// Sketch Plugin: AEFlowchart - Connect (ctrl shift c)
-// Source: github.com/tadija/AEFlowchart
-// Version: 1.0
+// Connect (ctrl shift c)
 
 #import 'AEFlowchart.js'
 
@@ -9,6 +7,7 @@ connectSteps(drawAllConnections);
 
 function drawAllConnections(selection)
 {
+
   // sort selection from top to bottom steps
   var sortedSelection = [];
   var loop = [selection objectEnumerator];
@@ -21,18 +20,13 @@ function drawAllConnections(selection)
   for (var i = 0; i < sortedSelection.length; i++) {
     // skip last step (there is no step after to connect)
     if ((i + 1) < sortedSelection.length) {
-      var twoSteps = [sortedSelection[i], sortedSelection[i + 1]];
-      drawOneConnection(twoSteps);
+      drawOneConnection(sortedSelection[i], sortedSelection[i + 1]);
     }
   }
 }
 
-function drawOneConnection(twoSteps)
+function drawOneConnection(firstStep, secondStep) 
 {
-  // get steps to connect
-  var firstStep = twoSteps[0];
-  var secondStep = twoSteps[1];
-
   // get connectionsGroup position
   var parentGroup = [firstStep parentGroup];
   var connectionsGroup = getConnectionsGroup(parentGroup);
@@ -44,19 +38,67 @@ function drawOneConnection(twoSteps)
   var firstStepFrame = [firstStep frame];
   var secondStepFrame = [secondStep frame];
 
-  // get points (always reset to origin of the artboard by substracting connectionsGroup position)
-  var firstStepBottom = [firstStepFrame maxY] - connectionsGroupY;
-  var firstStepRight = [firstStepFrame maxX] - connectionsGroupX;
-  var firstStepHorizontalMiddle = [firstStepFrame midX] - connectionsGroupX;
-  var firstStepVerticalMiddle = [firstStepFrame midY] - connectionsGroupY;
-  var secondStepTop = [secondStepFrame minY] - connectionsGroupY;
-  var secondStepLeft = [secondStepFrame minX] - connectionsGroupX;
-  var secondStepHorizontalMiddle = [secondStepFrame midX] - connectionsGroupX;
-  var secondStepVerticalMiddle = [secondStepFrame midY] - connectionsGroupY;
+  // get First point
+  var firstStepBottom,
+      firstStepRight,
+      firstStepHorizontalMiddle, 
+      firstStepVerticalMiddle;
+
+  if (firstStep.name().indexOf("Decision -") > -1) {
+
+    var decisionShape = firstStep.layers().array()[0];
+    var decisionShapeFrame = decisionShape.frame();
+
+    log ("First " + decisionShape.name())
+
+    firstStepBottom = firstStepFrame.minY() + decisionShapeFrame.maxY() - connectionsGroupY;
+    firstStepRight = firstStepFrame.minX() + decisionShapeFrame.maxX() - connectionsGroupX;
+    firstStepHorizontalMiddle = firstStepFrame.minX() + decisionShapeFrame.midX() - connectionsGroupX;
+    firstStepVerticalMiddle = firstStepFrame.minY() + decisionShapeFrame.midY() - connectionsGroupY;
+
+    log (firstStepBottom);
+    log (firstStepRight);
+    log (firstStepHorizontalMiddle);
+    log (firstStepVerticalMiddle);
+
+  } else {
+    firstStepBottom = firstStepFrame.maxY() - connectionsGroupY;
+    firstStepRight = firstStepFrame.maxX() - connectionsGroupX;
+    firstStepHorizontalMiddle = firstStepFrame.midX() - connectionsGroupX;
+    firstStepVerticalMiddle = firstStepFrame.midY() - connectionsGroupY;
+  }
+
+  // get Second point
+  var secondStepTop,
+      secondStepLeft,
+      secondStepHorizontalMiddle, 
+      secondStepVerticalMiddle;
+
+  if (secondStep.name().indexOf("Decision -") > -1) {
+    var decisionShape = secondStep.layers().array()[0];
+    var decisionShapeFrame = decisionShape.frame();
+
+    log ("Second " + decisionShape.name())
+
+    secondStepTop = secondStepFrame.minY() + decisionShapeFrame.minY() - connectionsGroupY;
+    secondStepLeft = secondStepFrame.minX() + decisionShapeFrame.minX() - connectionsGroupX;
+    secondStepHorizontalMiddle = secondStepFrame.minX() + decisionShapeFrame.midX() - connectionsGroupX;
+    secondStepVerticalMiddle = secondStepFrame.minY() + decisionShapeFrame.midY() - connectionsGroupY;
+  } else {
+    secondStepTop = secondStepFrame.minY() - connectionsGroupY;
+    secondStepLeft = secondStepFrame.minX() - connectionsGroupX;
+    secondStepHorizontalMiddle = secondStepFrame.midX() - connectionsGroupX;
+    secondStepVerticalMiddle = secondStepFrame.midY() - connectionsGroupY;
+  }
+
+  // calcurate the half point
   var horizontalSpacingHalf = (secondStepLeft - firstStepRight) / 2;
   var verticalSpacingHalf = (secondStepTop - firstStepBottom) / 2;
   var horizontalMiddleDifference = firstStepHorizontalMiddle - secondStepHorizontalMiddle;
   var verticalMiddleDifference = firstStepVerticalMiddle - secondStepVerticalMiddle;
+
+  log ("horizontalMiddleDifference " + horizontalMiddleDifference);
+  log ("verticalMiddleDifference " + verticalMiddleDifference);  
 
   // create NSBezierPath
   var lineBezierPath = [NSBezierPath bezierPath];
@@ -94,8 +136,12 @@ function drawOneConnection(twoSteps)
   var lineShapeStyle = [lineShape style];
   var borders = [lineShapeStyle borders];
   if([borders count] <= 0) [borders addNewStylePart];
+
+  // set border style
   var border = [lineShapeStyle border];
-  [border setColor:[MSColor colorWithSVGString:"#DBDDDE"]];
+  border.setColor(MSColor.colorWithSVGString(connectorColor));
+  border.thickness = 2;
+
 
   // add line shape to connectionsGroup
   [connectionsGroup addLayers:[lineShape]];
