@@ -1,5 +1,7 @@
 // Process (ctrl shift p)
 
-#import 'flowmate.js'
+#import 'lib/flowmate.js'
+#import 'lib/util.js'
 
-com.flowmate.createShapeByType("process");
+com.flowmate.init();
+com.flowmate.createSymbol("Process");
