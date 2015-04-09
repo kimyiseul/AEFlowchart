@@ -1,7 +1,14 @@
-#import 'AEFlowchart.js'
+// Decision (ctrl shift d)
+
+@import 'lib/flowmate.js'
+@import 'lib/options.js'
+@import 'lib/util.js'
+
+com.flowmate.init();
+com.flowmate.createSymbol("Decision");
 
 /*  call AEFlowchart main function with custom name and shape function  */
-createStep("Decision", decisionShape);
+//createStep("Decision", decisionShape);
 
 function addXYText(newGroup, label, shape) {
   var labelFrame = [label frame],

@@ -1,13 +1,15 @@
 // Connect (ctrl shift c)
 
-#import 'AEFlowchart.js'
+@import "lib/flowmate.js"
+@import 'lib/options.js'
+@import 'lib/util.js'
 
-/*  call AEFlowchart main function with custom name and lineShape function  */
-connectSteps(drawAllConnections);
+com.flowmate.init();
+com.flowmate.connectSymbols(drawAllConnections);
 
 function drawAllConnections(selection)
 {
-
+  com.flowmate.util.showToast ("Draw");
   // sort selection from top to bottom steps
   var sortedSelection = [];
   var loop = [selection objectEnumerator];
@@ -28,6 +30,7 @@ function drawAllConnections(selection)
 function drawOneConnection(firstStep, secondStep) 
 {
   // get connectionsGroup position
+
   var parentGroup = [firstStep parentGroup];
   var connectionsGroup = getConnectionsGroup(parentGroup);
   var connectionsGroupFrame = [connectionsGroup frame];
@@ -128,7 +131,8 @@ function drawOneConnection(firstStep, secondStep)
   }
 
   // create vector line
-  var lineShape = [[MSShapeGroup alloc] init];
+  var connectorColor  = com.flowmate.options.connector.connectorColor,
+      lineShape       = [[MSShapeGroup alloc] init];
   [lineShape setBezierPath: lineBezierPath];
   [lineShape setName:[firstStep name] + " -> " + [secondStep name]];
 
@@ -142,7 +146,9 @@ function drawOneConnection(firstStep, secondStep)
   border.setColor(MSColor.colorWithSVGString(connectorColor));
   border.thickness = 2;
 
-
+  // set arrow;
+  lineShape.firstLayer().setEndDecorationType(1);
+ 
   // add line shape to connectionsGroup
   [connectionsGroup addLayers:[lineShape]];
 
@@ -168,12 +174,13 @@ function sortByPosition(a,b)
 
 function getConnectionsGroup(parentGroup)
 {
-  var connectionsGroup = [parentGroup layerWithId:"AEConnections"];
+  var groupName         = com.flowmate.options.connector.connectorGroupName, 
+      connectionsGroup  = [parentGroup layerWithId:groupName];
 
   // create group if not exists
   if (connectionsGroup === null) {
     connectionsGroup = [parentGroup addLayerOfType:"group"];
-    [connectionsGroup setName:"AEConnections"];
+    [connectionsGroup setName:groupName];
     [connectionsGroup setIsLocked:true];
   }
 

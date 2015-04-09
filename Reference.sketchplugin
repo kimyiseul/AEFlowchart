@@ -1,60 +1,10 @@
-// Reference
+// Reference (ctrl shift R)
 
-#import 'AEFlowchart.js'
+// Process (ctrl shift p)
 
-/*  call AEFlowchart main function with custom name and shape function  */
-createStep("Reference", ReferenceShape);
+@import 'lib/flowmate.js'
+@import 'lib/options.js'
+@import 'lib/util.js'
 
-function ReferenceShape(label)
-{
-  // create shape
-  var parentGroup = [label parentGroup];
-  var ovalShape = MSOvalShape.alloc().init();
-  ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,40,40));
-
-  var shapeGroup;
-
-  if ( ovalShape.embedInShapeGroup != undefined ) {
-    shapeGroup = ovalShape.embedInShapeGroup()
-  } else if ( MSShapeGroup.shapeWithPath != undefined ) {
-    shapeGroup = MSShapeGroup.shapeWithPath(ovalShape)
-  } 
-
-  var fill = shapeGroup.style().fills().addNewStylePart();
-  fill.color = MSColor.colorWithSVGString("#dd2020");
-  
-  parentGroup.addLayers([shapeGroup]);
-
-  // set font
-  label.fontSize = 10;
-  label.textColor = MSColor.colorWithSVGString("#FFFFFF");
-  label.setFontPostscriptName(labelFontNameForDecision);
-
-  // set frame
-  var labelFrame = label.frame();
-  var shapeFrame = ovalShape.frame();
-
-  shapeFrame.setMidX(labelFrame.midX());
-  shapeFrame.setMidY(labelFrame.midY());
-
-  shapeGroup.setFrame(shapeFrame);
-
-  // set border
-  var border = shapeGroup.style().borders().addNewStylePart();
-  border.color = MSColor.colorWithSVGString(processBorderColor);
-  border.thickness = 0;
-
-  // set style
-  var shapeStyle = shapeGroup.style();
-  var fills = shapeStyle.fills();
-
-  if(fills.count() <= 0) {
-    fills.addNewStylePart();
-  }
-  
-  var shapeFill = shapeStyle.fill();
-  shapeFill.setFillType(0);
-  shapeFill.color = MSColor.colorWithSVGString(startEndFillColor);
-
-  return shapeGroup;
-}
+com.flowmate.init();
+com.flowmate.createSymbol("Reference");

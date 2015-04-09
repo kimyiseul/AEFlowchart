@@ -1,8 +1,13 @@
-#AEFlowchart
-The idea of this plugin is to make it fast and easy to draw flowcharts in Sketch, because why not?
+# Flowmate
 
-![AEFlowchart](http://tadija.net/public/AEFlowchart.gif)
+Type your idea first, convert the idea to the symobol of flowchart. It's fast and simaple.
 
-> You can see it in more detail on [Vimeo](https://vimeo.com/tadija/aeflowchart).
+## Special Thanks to
 
-Basically, you add some text labels, convert them to appropriate flowchart shapes and then connect them.
+- tadija (https://github.com/tadija/aeflowchart)
+
+The main concept of Flowmate is inspired by him. In addtion, the connetion line is use his code almost.
+
+- utmo (https://github.com/utom/) and marcosvidal (https://github.com/marcosvidal)
+
+When I stared to develop my own plugin, there code is great examples. 
